@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kitchen-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kitchen-service
+  template:
+    metadata:
+      labels:
+        app: kitchen-service
+    spec:
+      containers:
+        - name: kitchen-service
+          image: harbor.example.com/cblm/kitchen-service:dev
+          envFrom:
+            - configMapRef:
+                name: kitchen-service-config
+          ports:
+            - containerPort: 8080
