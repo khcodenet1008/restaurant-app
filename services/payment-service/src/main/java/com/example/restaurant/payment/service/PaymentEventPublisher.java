@@ -2,14 +2,19 @@ package com.example.restaurant.payment.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Instant;
+import java.util.concurrent.CompletableFuture;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class PaymentEventPublisher {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PaymentEventPublisher.class);
 
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
@@ -41,7 +46,20 @@ public class PaymentEventPublisher {
             message.put("source", "payment-service");
             message.put("traceId", traceId);
             message.put("payload", payload);
-            kafkaTemplate.send(topicName, orderId, objectMapper.writeValueAsString(message));
+            String body = objectMapper.writeValueAsString(message);
+
+            CompletableFuture.runAsync(() -> {
+                try {
+                    kafkaTemplate.send(topicName, orderId, body)
+                            .whenComplete((result, exception) -> {
+                                if (exception != null) {
+                                    LOGGER.warn("Kafka publish failed for payment event {} on order {}", eventType, orderId, exception);
+                                }
+                            });
+                } catch (Exception exception) {
+                    LOGGER.warn("Kafka publish skipped for payment event {} on order {}", eventType, orderId, exception);
+                }
+            });
         } catch (Exception exception) {
             throw new IllegalStateException("Failed to publish payment event", exception);
         }

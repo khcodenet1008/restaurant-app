@@ -34,13 +34,13 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderResponse> getOrder(@PathVariable String orderId) {
+    public ResponseEntity<OrderResponse> getOrder(@PathVariable("orderId") String orderId) {
         return ResponseEntity.ok(orderService.getOrder(orderId));
     }
 
     @PatchMapping("/{orderId}/cancel")
     public ResponseEntity<OrderResponse> cancelOrder(
-            @PathVariable String orderId,
+            @PathVariable("orderId") String orderId,
             @RequestBody(required = false) CancelOrderRequest request) {
         CancelOrderRequest effectiveRequest = request == null
                 ? new CancelOrderRequest("Cancelled by API request")

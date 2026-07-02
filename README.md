@@ -37,3 +37,22 @@ kubectl -n restaurant-demo create secret generic mysql-secret \
   --dry-run=client -o yaml | kubectl apply -f -
 kubectl apply -k ../restaurant-gitops/overlays/dev
 ```
+
+## Frontend
+
+The workspace root now also includes a simple learning UI in `../frontend`.
+
+Run it after port-forwarding the gateway:
+
+```bash
+kubectl port-forward deployment/gateway-service -n restaurant-demo 8080:8080
+cd ../frontend
+npm install
+npm run dev
+```
+
+Frontend environment variable:
+
+```bash
+VITE_GATEWAY_API_BASE_URL=http://localhost:8080
+```
