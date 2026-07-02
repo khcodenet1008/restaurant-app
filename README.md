@@ -2,52 +2,38 @@
 
 Simple classroom baseline for the CBLM restaurant microservices assignment.
 
-## Repositories
-
-- `restaurant-app/`: application code, service-local config, service-local manifests, contracts, and docs
-- `restaurant-gitops/`: GitOps desired state, overlays, and release-time deployment assembly
-
 ## Services
 
 - `gateway-service`
 - `menu-service`
 - `order-service`
 - `payment-service`
-- `notification-service`
-- `inventory-service`
-- `kitchen-service`
 
-## Structure
-
-- `services/`: one folder per service owner
-- `docs/assignment/`: split-work guide, full-flow guide, and short summary copied into the repo
-- `docs/contracts/`: API, route, and event contracts
-- `docs/standards/`: frozen team conventions and config reference
-- `docs/database/`: SQL template guide and database ownership notes
-- `platform/`: service-local Kubernetes manifests and shared platform base
-- `.github/workflows/`: CI workflow boilerplate
-
-## Current Baseline
+## Current Scope
 
 - `gateway-service` forwards public API routes and adds a correlation ID header
 - `menu-service` provides menu item read APIs
 - `order-service` creates, reads, and cancels orders
-- `payment-service` provides a mock confirm API
-- `inventory-service`, `payment-service`, `kitchen-service`, `order-service`, and `notification-service` are connected with a simple Kafka choreography flow
-- service-local schemas and Flyway migrations are included for all business services
-- Kubernetes manifests and GitOps repo structure are prepared for a Docker Hub and Argo CD classroom workflow
+- `payment-service` provides a mock confirm API and publishes payment results
+- Kafka is kept only for simple order and payment events
+- Istio mesh is prepared only for these same 4 services
 
-## Ownership Model
+## Build
 
-- Member 1: `gateway-service`, `menu-service`
-- Member 2: `order-service`
-- Member 3: `payment-service`, `notification-service`
-- Member 4: `inventory-service`, `kitchen-service`
+```bash
+mvn clean package
+docker build -t docker.io/khcodenet1008/gateway-service:dev services/gateway-service
+docker build -t docker.io/khcodenet1008/menu-service:dev services/menu-service
+docker build -t docker.io/khcodenet1008/order-service:dev services/order-service
+docker build -t docker.io/khcodenet1008/payment-service:dev services/payment-service
+```
 
-## Next Steps
+## Deploy
 
-1. Add Maven Wrapper or install Maven locally to run the build and tests.
-2. Replace direct Kafka publish with the simple outbox relay described in `docs/architecture/kafka-ci-cd-workflow.md`.
-3. Add shared error handling and integration tests for the public APIs and Kafka listeners.
-4. Finish GitHub Actions image build plus GitOps SHA tag update.
-5. Verify the full demo flow in Kubernetes through `restaurant-gitops/`.
+```bash
+kubectl create namespace restaurant-demo --dry-run=client -o yaml | kubectl apply -f -
+kubectl -n restaurant-demo create secret generic mysql-secret \
+  --from-literal=root-password=root1234 \
+  --dry-run=client -o yaml | kubectl apply -f -
+kubectl apply -k ../restaurant-gitops/overlays/dev
+```

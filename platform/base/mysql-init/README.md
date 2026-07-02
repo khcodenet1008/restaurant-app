@@ -7,6 +7,3 @@ Use this script only as infrastructure setup. Business tables are owned by servi
 - `services/menu-service/src/main/resources/db/migration`
 - `services/order-service/src/main/resources/db/migration`
 - `services/payment-service/src/main/resources/db/migration`
-- `services/notification-service/src/main/resources/db/migration`
-- `services/inventory-service/src/main/resources/db/migration`
-- `services/kitchen-service/src/main/resources/db/migration`

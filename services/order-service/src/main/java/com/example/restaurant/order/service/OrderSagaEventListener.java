@@ -16,18 +16,8 @@ public class OrderSagaEventListener {
         this.orderService = orderService;
     }
 
-    @KafkaListener(topics = "${INVENTORY_EVENTS_TOPIC:inventory.events}", groupId = "${ORDER_CONSUMER_GROUP:order-service}")
-    public void onInventoryEvent(String message) throws Exception {
-        handle(message);
-    }
-
     @KafkaListener(topics = "${PAYMENT_EVENTS_TOPIC:payment.events}", groupId = "${ORDER_CONSUMER_GROUP:order-service}")
     public void onPaymentEvent(String message) throws Exception {
-        handle(message);
-    }
-
-    @KafkaListener(topics = "${KITCHEN_EVENTS_TOPIC:kitchen.events}", groupId = "${ORDER_CONSUMER_GROUP:order-service}")
-    public void onKitchenEvent(String message) throws Exception {
         handle(message);
     }
 

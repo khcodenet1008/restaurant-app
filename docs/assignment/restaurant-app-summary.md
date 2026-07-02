@@ -4,8 +4,8 @@
 
 - Build a restaurant microservices application for the CBLM assignment.
 - Use independent service ownership with database-per-service design.
-- Include 7 main services: `gateway-service`, `menu-service`, `order-service`, `payment-service`, `notification-service`, `inventory-service`, and `kitchen-service`.
-- Support API gateway routing, service contracts, Docker deployment, Kubernetes manifests, and GitOps structure.
+- Keep only 4 application services: `gateway-service`, `menu-service`, `order-service`, and `payment-service`.
+- Support API gateway routing, Kafka event contracts, Docker deployment, Kubernetes manifests, GitOps structure, and Istio service mesh basics.
 
 ## Team Member
 

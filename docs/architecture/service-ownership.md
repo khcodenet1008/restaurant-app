@@ -1,33 +1,30 @@
 # Service Ownership
 
-This boilerplate follows an independence-first ownership model.
+This repository now uses a simplified 4-service model.
 
 ## Service Owners
 
-- Member 1: `gateway-service`, `menu-service`
-- Member 2: `order-service`
-- Member 3: `payment-service`, `notification-service`
-- Member 4: `inventory-service`, `kitchen-service`
+- Member 1: `gateway-service`
+- Member 2: `menu-service`
+- Member 3: `order-service`
+- Member 4: `payment-service`
 
-## Chosen Shared Workflow
+## Shared Workflow
 
-The easiest shared integration path is documented in [kafka-ci-cd-workflow.md](kafka-ci-cd-workflow.md).
+The main delivery flow is documented in [kafka-ci-cd-workflow.md](kafka-ci-cd-workflow.md).
 
-- Kafka carries asynchronous Saga events between services.
-- GitHub Actions runs CI for all services.
-- Docker Hub stores deployable service images.
-- `restaurant-gitops/` stores the desired Kubernetes state.
-- Argo CD watches the GitOps repo and performs CD into Kubernetes.
+- `gateway-service` handles HTTP entry and route forwarding
+- `menu-service` provides menu read APIs
+- `order-service` creates, reads, and cancels orders
+- `payment-service` confirms mock payments and publishes payment result events
 
 ## Ownership Boundaries
 
-- One service has one owner.
-- One database schema has one owner.
-- One service-local manifest folder has one owner.
-- One service contract folder has one owner.
+- one service has one owner
+- one schema has one owner
+- one service-local manifest folder has one owner
+- one contract folder has one owner
 
 ## Shared Integration Rule
 
-Shared components such as MySQL, Kafka, Keycloak, CI, GitOps overlays, and observability should only be assembled after service-local contracts are frozen.
-
-Member 3 assembles the CI/CD workflow during integration, but every service owner must keep their service tests, Dockerfile, ConfigMap, Deployment, Service, and event contracts ready for the shared pipeline.
+Shared components such as MySQL, Kafka, Keycloak, CI, GitOps overlays, and Istio should be integrated after each service contract is stable.

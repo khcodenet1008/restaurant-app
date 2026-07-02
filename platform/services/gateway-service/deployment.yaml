@@ -11,6 +11,8 @@ spec:
     metadata:
       labels:
         app: gateway-service
+      annotations:
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
         - name: gateway-service

@@ -4,7 +4,7 @@ This page defines order API ownership, order state transitions, and order event 
 
 ## Kafka Ownership
 
-Owner: Member 2
+Owner: Member 3
 
 Published topic: `order.events`
 
@@ -16,14 +16,11 @@ Published events:
 
 Consumed events:
 
-- `InventoryReserved.v1`
-- `InventoryReservationFailed.v1`
 - `PaymentAuthorized.v1`
 - `PaymentFailed.v1`
-- `KitchenTicketCompleted.v1`
 
-The `order-service` owns the Saga state and final order status. It does not call inventory, payment, kitchen, or notification databases directly.
+The `order-service` owns the order state and final order status. It does not access another service database directly.
 
 ## CI/CD Responsibility
 
-Member 2 keeps order tests passing in GitHub Actions and provides the Dockerfile, ConfigMap, Deployment, Service, and GitOps image tag inputs for `order-service`.
+Member 3 keeps order tests passing in GitHub Actions and provides the Dockerfile, ConfigMap, Deployment, Service, and GitOps image tag inputs for `order-service`.

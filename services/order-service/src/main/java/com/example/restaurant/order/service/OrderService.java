@@ -146,12 +146,7 @@ public class OrderService {
         String eventId = event.path("eventId").asText(null);
 
         switch (eventType) {
-            case "InventoryReserved" -> updateOrder(order, sagaState, "INVENTORY_RESERVED", "INVENTORY_RESERVED", "IN_PROGRESS", eventId, null);
-            case "InventoryReservationFailed" -> updateOrder(order, sagaState, "CANCELLED", "INVENTORY_FAILED", "FAILED", eventId, readReason(event));
-            case "PaymentAuthorized" -> updateOrder(order, sagaState, "PAYMENT_AUTHORIZED", "PAYMENT_AUTHORIZED", "IN_PROGRESS", eventId, null);
-            case "PaymentFailed" -> updateOrder(order, sagaState, "CANCELLED", "PAYMENT_FAILED", "FAILED", eventId, readReason(event));
-            case "KitchenTicketCreated" -> updateOrder(order, sagaState, "PREPARING", "KITCHEN_CREATED", "IN_PROGRESS", eventId, null);
-            case "KitchenTicketCompleted" -> {
+            case "PaymentAuthorized" -> {
                 updateOrder(order, sagaState, "COMPLETED", "ORDER_COMPLETED", "COMPLETED", eventId, null);
                 Map<String, Object> payload = Map.of("orderId", order.getId(), "status", "COMPLETED");
                 orderEventPublisher.publish(
@@ -162,6 +157,7 @@ public class OrderService {
                         order.getTraceId(),
                         payload);
             }
+            case "PaymentFailed" -> updateOrder(order, sagaState, "CANCELLED", "PAYMENT_FAILED", "FAILED", eventId, readReason(event));
             default -> {
                 return;
             }

@@ -12,10 +12,6 @@ spring:
           uri: ${ORDER_SERVICE_URL:http://order-service:8080}
           predicates:
             - Path=/api/orders/**
-        - id: kitchen-api
-          uri: ${KITCHEN_SERVICE_URL:http://kitchen-service:8080}
-          predicates:
-            - Path=/api/kitchen/**
         - id: payment-api
           uri: ${PAYMENT_SERVICE_URL:http://payment-service:8080}
           predicates:
