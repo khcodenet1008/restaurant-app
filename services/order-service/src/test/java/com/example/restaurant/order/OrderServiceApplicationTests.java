@@ -43,7 +43,7 @@ class OrderServiceApplicationTests {
         @Bean
         @Primary
         OrderEventPublisher orderEventPublisher() {
-            return new OrderEventPublisher(null, new ObjectMapper(), "test.order.events") {
+            return new OrderEventPublisher(null, new ObjectMapper(), "test.order.events", 1000L) {
                 @Override
                 public void publish(
                         String orderId,

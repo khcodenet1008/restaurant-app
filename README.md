@@ -28,6 +28,23 @@ docker build -t docker.io/khcodenet1008/order-service:dev services/order-service
 docker build -t docker.io/khcodenet1008/payment-service:dev services/payment-service
 ```
 
+## CI/CD
+
+- Pull requests and `main` pushes run Maven tests for:
+  - `gateway-service`
+  - `menu-service`
+  - `order-service`
+  - `payment-service`
+- Pushes to `main` also:
+  - build and push Docker Hub images tagged with the commit SHA and `latest`
+  - update `restaurant-gitops` deployment image tags to the same SHA
+
+Required GitHub Actions secrets:
+
+- `DOCKERHUB_USERNAME`
+- `DOCKERHUB_TOKEN`
+- `GITOPS_REPO_TOKEN`
+
 ## Deploy
 
 ```bash
@@ -37,6 +54,18 @@ kubectl -n restaurant-demo create secret generic mysql-secret \
   --dry-run=client -o yaml | kubectl apply -f -
 kubectl apply -k ../restaurant-gitops/overlays/dev
 ```
+
+Inspect MySQL with phpMyAdmin:
+
+```bash
+kubectl port-forward service/phpmyadmin -n restaurant-demo 8081:80
+```
+
+Then open `http://localhost:8081` and sign in with:
+
+- server: `mysql`
+- username: `restaurant_app`
+- password: `change-me`
 
 ## Frontend
 

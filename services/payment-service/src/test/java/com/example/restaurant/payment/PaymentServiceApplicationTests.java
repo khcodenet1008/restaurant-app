@@ -35,7 +35,7 @@ class PaymentServiceApplicationTests {
         @Bean
         @Primary
         PaymentEventPublisher paymentEventPublisher() {
-            return new PaymentEventPublisher(null, new ObjectMapper(), "test.payment.events") {
+            return new PaymentEventPublisher(null, new ObjectMapper(), "test.payment.events", 1000L) {
                 @Override
                 public void publish(
                         String orderId,
