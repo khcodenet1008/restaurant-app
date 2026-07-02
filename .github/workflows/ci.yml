@@ -27,5 +27,4 @@ jobs:
           java-version: 17
           cache: maven
       - name: Build service
-        working-directory: restaurant-app
         run: mvn -pl services/${{ matrix.service }} -am test

@@ -39,6 +39,8 @@ Most services include:
 
 Menu currently has `outbox_event` for future catalog availability events but does not need `processed_event` unless it starts consuming events.
 
+The first Kafka implementation uses an application-level Outbox relay in each publishing service. Debezium and Kafka Connect are optional later improvements, but the direct relay is the easiest assignment path.
+
 ## Usage
 
 1. Run `platform/base/mysql-init/00-create-databases.sql` once for a local/demo MySQL instance.
@@ -48,3 +50,7 @@ Menu currently has `outbox_event` for future catalog availability events but doe
 ## Boundary Rule
 
 Do not create foreign keys across schemas. Cross-service references such as `order_id`, `menu_item_id`, or `payment_id` are stored as business identifiers only. Data synchronization happens through APIs or events, not direct database joins.
+
+## Kafka and CI/CD Rule
+
+Schema changes must pass the GitHub Actions Maven test matrix before merge. If a schema change affects an event payload, update the matching event contract in `docs/contracts/events/README.md` and the owning service contract before promotion through GitOps.

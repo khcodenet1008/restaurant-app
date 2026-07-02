@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: payment-service
-          image: harbor.example.com/cblm/payment-service:dev
+          image: docker.io/khcodenet1008/payment-service:dev
           envFrom:
             - configMapRef:
                 name: payment-service-config

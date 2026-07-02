@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: kitchen-service
-          image: harbor.example.com/cblm/kitchen-service:dev
+          image: docker.io/khcodenet1008/kitchen-service:dev
           envFrom:
             - configMapRef:
                 name: kitchen-service-config

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: notification-service
-          image: harbor.example.com/cblm/notification-service:dev
+          image: docker.io/khcodenet1008/notification-service:dev
           envFrom:
             - configMapRef:
                 name: notification-service-config

@@ -3,8 +3,6 @@ spring:
     name: gateway-service
   cloud:
     gateway:
-      default-filters:
-        - AddRequestHeader=${CORRELATION_HEADER_NAME:X-Correlation-Id}, ${CORRELATION_HEADER_VALUE:generated-at-runtime}
       routes:
         - id: menu-items
           uri: ${MENU_SERVICE_URL:http://menu-service:8080}

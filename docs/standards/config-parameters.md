@@ -21,6 +21,9 @@ This file documents which parameters belong to which service and where they shou
 | `CORRELATION_HEADER_NAME` | `X-Correlation-Id` | Shared standard | No | All services |
 | `KEYCLOAK_ISSUER_URI` | `http://keycloak:8080/realms/restaurant-demo` | Shared integration | No | Gateway and protected services |
 | `KAFKA_BOOTSTRAP_SERVERS` | `kafka:9092` | Shared integration | No | Order, payment, notification, inventory, kitchen |
+| `KAFKA_DLQ_TOPIC` | `restaurant.dlq` | Shared integration | No | Kafka consumers |
+| `KAFKA_CONSUMER_AUTO_OFFSET_RESET` | `earliest` | Shared integration | No | Kafka consumers |
+| `KAFKA_CONSUMER_MAX_RETRIES` | `3` | Shared integration | No | Kafka consumers |
 | `MYSQL_HOST` | `mysql` | Shared integration | No | Menu, order, payment, notification, inventory, kitchen |
 | `MYSQL_PORT` | `3306` | Shared integration | No | Menu, order, payment, notification, inventory, kitchen |
 | `MYSQL_USERNAME` | `restaurant_app` | Shared integration | Yes | Menu, order, payment, notification, inventory, kitchen |
@@ -66,6 +69,7 @@ This file documents which parameters belong to which service and where they shou
 | `ORDER_DB_NAME` | `restaurant_order` | No | Service-owned schema |
 | `ORDER_DB_URL` | `jdbc:mysql://mysql:3306/restaurant_order` | No | Preferred full JDBC override |
 | `ORDER_EVENTS_TOPIC` | `order.events` | No | Order event topic |
+| `ORDER_CONSUMER_GROUP` | `order-service` | No | Consumes inventory, payment, and kitchen events |
 | `ORDER_COMMAND_TIMEOUT_MS` | `5000` | No | Saga wait or retry coordination setting |
 
 ### payment-service
@@ -75,6 +79,7 @@ This file documents which parameters belong to which service and where they shou
 | `PAYMENT_DB_NAME` | `restaurant_payment` | No | Service-owned schema |
 | `PAYMENT_DB_URL` | `jdbc:mysql://mysql:3306/restaurant_payment` | No | Preferred full JDBC override |
 | `PAYMENT_EVENTS_TOPIC` | `payment.events` | No | Payment event topic |
+| `PAYMENT_CONSUMER_GROUP` | `payment-service` | No | Consumes inventory reservation events |
 | `PAYMENT_MOCK_MODE` | `true` | No | Keep real provider out of scope |
 
 ### notification-service
@@ -84,6 +89,7 @@ This file documents which parameters belong to which service and where they shou
 | `NOTIFICATION_DB_NAME` | `restaurant_notification` | No | Service-owned schema |
 | `NOTIFICATION_DB_URL` | `jdbc:mysql://mysql:3306/restaurant_notification` | No | Preferred full JDBC override |
 | `NOTIFICATION_EVENTS_TOPIC` | `notification.events` | No | Notification event topic |
+| `NOTIFICATION_CONSUMER_GROUP` | `notification-service` | No | Consumes order, payment, inventory, and kitchen events |
 | `NOTIFICATION_CHANNELS` | `EMAIL,SMS,APP` | No | Demo channel list |
 
 ### inventory-service
@@ -93,6 +99,7 @@ This file documents which parameters belong to which service and where they shou
 | `INVENTORY_DB_NAME` | `restaurant_inventory` | No | Service-owned schema |
 | `INVENTORY_DB_URL` | `jdbc:mysql://mysql:3306/restaurant_inventory` | No | Preferred full JDBC override |
 | `INVENTORY_EVENTS_TOPIC` | `inventory.events` | No | Inventory event topic |
+| `INVENTORY_CONSUMER_GROUP` | `inventory-service` | No | Consumes order and payment failure events |
 | `INVENTORY_RESERVATION_TTL_SECONDS` | `900` | No | Demo reservation window |
 
 ### kitchen-service
@@ -102,7 +109,18 @@ This file documents which parameters belong to which service and where they shou
 | `KITCHEN_DB_NAME` | `restaurant_kitchen` | No | Service-owned schema |
 | `KITCHEN_DB_URL` | `jdbc:mysql://mysql:3306/restaurant_kitchen` | No | Preferred full JDBC override |
 | `KITCHEN_EVENTS_TOPIC` | `kitchen.events` | No | Kitchen event topic |
+| `KITCHEN_CONSUMER_GROUP` | `kitchen-service` | No | Consumes payment approval events |
 | `KITCHEN_DEFAULT_QUEUE` | `main-line` | No | Demo ticket queue |
+
+## CI/CD Secrets
+
+These values belong in GitHub repository secrets, not in committed files.
+
+| Secret | Example | Used By |
+|---|---|---|
+| `DOCKERHUB_USERNAME` | `teamname` | GitHub Actions image push |
+| `DOCKERHUB_TOKEN` | `********` | GitHub Actions image push |
+| `GITOPS_TOKEN` | `github_pat_...` | GitHub Actions GitOps repo update |
 
 ## Where to Put Values
 

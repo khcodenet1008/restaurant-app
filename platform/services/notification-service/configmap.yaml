@@ -5,5 +5,11 @@ metadata:
 data:
   NOTIFICATION_DB_NAME: "restaurant_notification"
   NOTIFICATION_DB_URL: "jdbc:mysql://mysql:3306/restaurant_notification"
+  ORDER_EVENTS_TOPIC: "order.events"
+  INVENTORY_EVENTS_TOPIC: "inventory.events"
+  PAYMENT_EVENTS_TOPIC: "payment.events"
+  KITCHEN_EVENTS_TOPIC: "kitchen.events"
   NOTIFICATION_EVENTS_TOPIC: "notification.events"
+  NOTIFICATION_CONSUMER_GROUP: "notification-service"
+  KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
   NOTIFICATION_CHANNELS: "EMAIL,SMS,APP"

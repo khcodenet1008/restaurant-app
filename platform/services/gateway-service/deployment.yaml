@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: gateway-service
-          image: harbor.example.com/cblm/gateway-service:dev
+          image: docker.io/khcodenet1008/gateway-service:dev
           envFrom:
             - configMapRef:
                 name: gateway-service-config

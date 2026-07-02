@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: menu-service
-          image: harbor.example.com/cblm/menu-service:dev
+          image: docker.io/khcodenet1008/menu-service:dev
           envFrom:
             - configMapRef:
                 name: menu-service-config

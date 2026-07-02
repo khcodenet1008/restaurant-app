@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: inventory-service
-          image: harbor.example.com/cblm/inventory-service:dev
+          image: docker.io/khcodenet1008/inventory-service:dev
           envFrom:
             - configMapRef:
                 name: inventory-service-config
